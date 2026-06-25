@@ -11,7 +11,7 @@
      - analyzeBtn stays disabled until a file is actually chosen
 ============================================================ */
 
-const API = "http://127.0.0.1:8000";
+const API = "https://vlad0009-privacy-shield-ai.hf.space";
 
 const ACCEPTED = new Set(["pdf","docx","txt","png","jpg","jpeg","webp","tiff","tif","bmp"]);
 const IMAGES   = new Set(["png","jpg","jpeg","webp","tiff","tif","bmp"]);
