@@ -1,0 +1,10 @@
+fastapi
+uvicorn
+presidio-analyzer
+presidio-anonymizer
+spacy
+pymupdf
+python-multipart
+pyyaml
+# After install, download the spaCy model:
+#   python -m spacy download en_core_web_lg
