@@ -24,3 +24,5 @@ pyzbar
 qrcode
 
 python-dateutil
+
+reportlab
