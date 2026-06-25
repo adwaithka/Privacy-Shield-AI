@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Privacy Shield AI</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <div class="bg-grid" aria-hidden="true"></div>
+  <div class="bg-orb bg-orb--1" aria-hidden="true"></div>
+  <div class="bg-orb bg-orb--2" aria-hidden="true"></div>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="logo">
+        <span class="logo-icon">
+          <svg width="26" height="26" viewBox="0 0 28 28" fill="none">
+            <path d="M14 2L4 6.5V13C4 18.55 8.34 23.74 14 25C19.66 23.74 24 18.55 24 13V6.5L14 2Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+            <path d="M10 13.5L12.5 16L18 11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+        <span class="logo-text">Privacy<strong>Shield</strong> <em>AI</em></span>
+      </div>
+      <span class="header-badge">v3.1</span>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <p class="hero-eyebrow">Intelligent PII Detection &amp; Selective Redaction</p>
+      <h1 class="hero-title">Privacy Shield <span class="accent">AI</span></h1>
+      <p class="hero-subtitle">Upload a document or image. Choose exactly what to mask — or let AI redact everything automatically.</p>
+    </section>
+
+    <!-- STEP 1: UPLOAD -->
+    <section class="card step-card" aria-label="Upload">
+      <div class="step-header">
+        <span class="step-pill">01</span>
+        <h2 class="step-title">Upload File</h2>
+        <span class="step-hint">PDF · DOCX · TXT · PNG · JPG · WEBP · TIFF</span>
+      </div>
+      <div class="drop-zone" id="drop-zone" role="button" tabindex="0">
+        <div class="dz-body" id="dz-body">
+          <div class="dz-icon">
+            <svg width="36" height="36" viewBox="0 0 40 40" fill="none">
+              <rect x="8" y="5" width="24" height="30" rx="3" stroke="currentColor" stroke-width="1.6"/>
+              <path d="M20 19V28M20 19L16 23M20 19L24 23" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M14 12h12M14 16h8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" opacity=".4"/>
+            </svg>
+          </div>
+          <p class="dz-primary">Drop file here</p>
+          <p class="dz-or">or</p>
+          <label class="btn btn--outline" for="file-input">Browse</label>
+          <input type="file" id="file-input" accept=".pdf,.docx,.txt,.png,.jpg,.jpeg,.webp,.tiff,.tif,.bmp" />
+          <p class="dz-hint">Max 20 MB</p>
+        </div>
+        <div class="dz-selected" id="dz-selected" hidden>
+          <div class="dz-preview" id="dz-preview"></div>
+          <div class="dz-file-info">
+            <span class="dz-filename" id="dz-filename"></span>
+            <span class="dz-size" id="dz-size"></span>
+          </div>
+          <button class="dz-clear" id="dz-clear" aria-label="Remove file">✕</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- STEP 2: MASKING OPTIONS -->
+    <section class="card step-card" aria-label="Masking options">
+      <div class="step-header">
+        <span class="step-pill">02</span>
+        <h2 class="step-title">Masking Options</h2>
+      </div>
+
+      <!-- Mode row -->
+      <div class="option-row">
+        <span class="option-row-label">Redaction mode</span>
+        <div class="mode-tabs" role="group" aria-label="Redaction mode">
+          <button class="mode-tab active" id="mode-all" data-mode="all">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            Full auto-redact
+          </button>
+          <button class="mode-tab" id="mode-custom" data-mode="custom">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+            Custom selection
+          </button>
+        </div>
+      </div>
+
+      <!-- Custom target grid (hidden until custom mode) -->
+      <div class="target-grid" id="target-grid" hidden>
+        <!-- populated by JS -->
+      </div>
+      <p class="mask-note" id="mask-note">All detected PII will be redacted automatically.</p>
+
+      <!-- Face mask toggle (image-only, always shown) -->
+      <div class="option-row" id="face-toggle-row">
+        <span class="option-row-label">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+          Blur faces in images
+        </span>
+        <label class="toggle" aria-label="Blur faces">
+          <input type="checkbox" id="face-toggle" checked />
+          <span class="toggle-track"><span class="toggle-thumb"></span></span>
+        </label>
+      </div>
+    </section>
+
+    <!-- ANALYZE -->
+    <div class="analyze-row">
+      <button class="btn btn--primary btn--lg" id="analyze-btn" disabled>
+        Analyze &amp; Redact
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+    </div>
+
+    <!-- LOADING -->
+    <div class="loading-state" id="loading-state" hidden role="status">
+      <div class="spinner">
+        <div class="spin-ring"></div>
+        <div class="spin-ring spin-ring--2"></div>
+        <div class="spin-core">
+          <svg width="18" height="18" viewBox="0 0 28 28" fill="none"><path d="M14 2L4 6.5V13C4 18.55 8.34 23.74 14 25C19.66 23.74 24 18.55 24 13V6.5L14 2Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+        </div>
+      </div>
+      <p class="loading-text" id="loading-text">Scanning document…</p>
+      <p class="loading-sub" id="loading-sub">Running entity recognition pipeline</p>
+    </div>
+
+    <!-- ERROR -->
+    <div class="error-bar" id="error-bar" hidden role="alert">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <span id="error-msg"></span>
+      <button class="error-close" id="error-close">✕</button>
+    </div>
+
+    <!-- RESULTS -->
+    <section class="results" id="results" hidden>
+
+      <div class="summary-strip">
+        <div class="summary-cell">
+          <span class="summary-label">File</span>
+          <span class="summary-val" id="r-filename">—</span>
+        </div>
+        <div class="summary-cell summary-cell--hl">
+          <span class="summary-label">Entities found</span>
+          <span class="summary-val" id="r-count">0</span>
+        </div>
+        <div class="summary-cell">
+          <span class="summary-label">Masked</span>
+          <span class="summary-val summary-val--green" id="r-masked">—</span>
+        </div>
+        <div class="summary-cell">
+          <span class="summary-label">Status</span>
+          <span class="summary-val summary-val--green">Done ✓</span>
+        </div>
+      </div>
+
+      <!-- Download -->
+      <div class="dl-bar" id="dl-bar" hidden>
+        <div class="dl-info">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><polyline points="9 15 12 18 15 15"/></svg>
+          <span id="dl-label">Redacted file ready</span>
+        </div>
+        <a class="btn btn--primary btn--sm" id="dl-btn" href="#" download="redacted">Download</a>
+      </div>
+
+      <!-- Redacted image preview -->
+      <div class="card result-card" id="img-result-card" hidden>
+        <div class="card-hdr">
+          <span class="step-pill step-pill--sm">Preview</span>
+          <h3 class="card-hdr-title">Redacted Image</h3>
+        </div>
+        <img id="redacted-img" src="" alt="Redacted image" class="redacted-img" />
+      </div>
+
+      <!-- Entities table -->
+      <div class="card result-card">
+        <div class="card-hdr">
+          <span class="step-pill step-pill--sm">03</span>
+          <h3 class="card-hdr-title">Detected Entities</h3>
+        </div>
+        <div class="tbl-wrap">
+          <table class="ent-table">
+            <thead><tr><th>Type</th><th>Detected text</th><th>Confidence</th></tr></thead>
+            <tbody id="ent-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Masked text -->
+      <div class="card result-card">
+        <div class="card-hdr">
+          <span class="step-pill step-pill--sm">04</span>
+          <h3 class="card-hdr-title">Redacted Text</h3>
+          <button class="btn btn--ghost btn--sm" id="copy-btn">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            <span id="copy-label">Copy</span>
+          </button>
+        </div>
+        <textarea class="masked-ta" id="masked-ta" readonly spellcheck="false"></textarea>
+      </div>
+
+    </section>
+  </main>
+
+  <footer class="site-footer">Privacy Shield AI &mdash; internship demonstration &middot; FastAPI backend at localhost:8000</footer>
+  <script src="script.js"></script>
+</body>
+</html>
