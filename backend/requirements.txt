@@ -1,10 +1,26 @@
 fastapi
-uvicorn
+uvicorn[standard]
+
 presidio-analyzer
 presidio-anonymizer
+
 spacy
-pymupdf
-python-multipart
 pyyaml
-# After install, download the spaCy model:
-#   python -m spacy download en_core_web_lg
+
+python-multipart
+
+pymupdf
+python-docx
+
+opencv-python-headless
+pillow
+
+numpy
+
+pytesseract
+
+pyzbar
+
+qrcode
+
+python-dateutil
