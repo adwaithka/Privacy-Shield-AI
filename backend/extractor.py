@@ -16,9 +16,15 @@ from docx import Document
 # Configure Tesseract
 # ------------------------------------------------
 
-pytesseract.pytesseract.tesseract_cmd = (
-    r"C:\Program Files\Tesseract-OCR\tesseract.exe"
-)
+import os
+import platform
+import pytesseract
+
+# Only set Windows path when running on Windows
+if platform.system() == "Windows":
+    pytesseract.pytesseract.tesseract_cmd = (
+        r"C:\Program Files\Tesseract-OCR\tesseract.exe"
+    )
 
 
 # ------------------------------------------------
